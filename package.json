@@ -1,0 +1,19 @@
+{
+  "name": "contactsdb",
+  "version": "1.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "Robert Tizzard",
+  "contributors": [],
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mysql": "^2.11.1",
+    "sqlite3": "^3.1.4"
+  }
+}

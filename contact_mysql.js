@@ -28,6 +28,9 @@ var mysql = require('mysql');
 var pool;
 
 contactSQL = {
+    // Create a pool to handle SQL queries. Noe SQL server, user and password
+    // need to be filled in.
+
     initSQL: function () {
 
         pool = mysql.createPool({
@@ -39,6 +42,8 @@ contactSQL = {
             debug: false
         });
     },
+    // Handle MySQL query.
+
     handleSQLQuery: function (query, req, res) {
 
         pool.getConnection(function (err, connection) {
@@ -64,6 +69,8 @@ contactSQL = {
         });
 
     },
+    // Not used at present but call when exit handling put in.
+
     termSQL: function () {
 
     }

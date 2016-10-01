@@ -24,14 +24,52 @@
 
 // Contact database SQLLite module
 
+var fs = require('fs');
 var sqlite3 = require('sqlite3');
 var db;
 
 contactSQL = {
     
+    // Open contacts database. If it dows not exist
+    // create db file and issue CREATE TABLE command
+
     initSQL: function () {
-        db = new sqlite3.Database('contacts_db.db');
+
+        var dbfile = 'contacts_db.db';
+        var exists = fs.existsSync(dbfile);
+        var dbCreateTable = "CREATE TABLE contacts (" +
+                "'contactID' INTEGER PRIMARY KEY  AUTOINCREMENT," +
+                "'firstName' VARCHAR(255) NULL DEFAULT NULL," +
+                "'lastName' VARCHAR(255) NULL DEFAULT NULL," +
+                "'phoneNumber' VARCHAR(255) NULL DEFAULT NULL," +
+                "'emailAddress' VARCHAR(255) NULL DEFAULT NULL," +
+                "'webSiteAddress' VARCHAR(255) NULL DEFAULT NULL," +
+                "'comments' VARCHAR(255) NULL DEFAULT NULL);";
+        
+        console.log("Database support with SQLITE3");
+        
+        if (!exists) {
+            console.log("Creating DB file.");
+            fs.closeSync(fs.openSync(dbfile, "w"));
+        }
+
+        db = new sqlite3.Database(dbfile);
+
+        if (!exists) {
+            db.all(dbCreateTable, function (err, rows) {
+                if (err) {
+                    console.log(err);
+                    exit();
+                } else {
+                    console.log("Contacts Table Created...");
+                }
+
+            });
+        }
     },
+    
+    // Handle SQLite query. Note Delete and update reurn no error and [] for rows
+    // so fake success by sending back {"affectedRows": 1} to client.
     
     handleSQLQuery: function (query, req, res) {
 
@@ -51,6 +89,9 @@ contactSQL = {
         });
 
     },
+    
+    // Not used at present but call when exit handling put in.
+    
     termSQL: function () {
         db.close();
     }

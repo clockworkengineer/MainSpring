@@ -1,7 +1,7 @@
 ## CRUD based Contact Database Application ##
 
 
-This started out as a personal exercise to put into practice skills that I have learnt in the last few months. It consists of a form based HTML front-end and that connects to the server based Node.js back-end that talks to either a MYSQL database or SQLite using SQL queries. The main form user interface is a bit primitive and clunky at the moment but it is useable and I will come back to it a later date. At present it just stores first name, last name, phone number, email address, website address and a comment per person.
+This started out as a personal exercise to put into practice skills that I have learnt in the last few months. It consists of a form based HTML front-end that connects to the server based Node.js back-end that talks to either a MYSQL database or SQLite using SQL queries. The main form user interface is a bit primitive and clunky at the moment but it is useable and I will come back to it a later date. At present it just stores first name, last name, phone number, email address, website address and a comment per person.
 
 The HTML form UI uses javascript and AJAX requests to talk to the back-end using the following RESTFUL API.
 

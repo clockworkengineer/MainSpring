@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 
-
 var  kHOSTSERVER = "http://localhost:8081";
 
 // AJAX request object for talking to server 
@@ -75,7 +74,8 @@ window.onload = function () {
         return(false);
     }
 
-
+    // Data Ok
+    
     return(true);
 }
 
@@ -134,6 +134,7 @@ function createContact() {
     if (!validContactData()) {
         return;
     }
+    
     // Add contact HTTP response recieved callback
 
     ajaxRequest.onreadystatechange = function () {
@@ -149,7 +150,6 @@ function createContact() {
             } else if (reply.code && reply.errno) {
                 displayStatus("color:red;", "SQL Error : " + reply.errno + " (" + reply.code + ").");
             } else if (reply.code && (reply.code === 100)) {
-                //   document.getElementById("serverReply").innerHTML = reply.status;
                 displayStatus("color:red;", reply.status);
             }
 
@@ -199,18 +199,17 @@ function getAllContacts()
             var rows = JSON.parse(ajaxRequest.responseText);
             var table = "<table align=\"center\" style=\"width:50%\"><tr><th>Last Name</th><th>First Name</th><th>Phone No</th><th>Email</th><th>Web Site</th><th>Action</th></tr>";
             if (rows.length !== 0) {
-                for (col = 0; col < rows.length; col++) {
-                    table += "<tr><td>" + rows[col].lastName + "</td>";
-                    table += "<td>" + rows[col].firstName + "</td>";
-                    table += "<td>" + rows[col].phoneNumber + "</td>";
-                    table += "<td>" + rows[col].emailAddress + "</td>";
-                    table += "<td>" + rows[col].webSiteAddress + "</td>";
-                    table += '<td><button type="button" name="Update" onclick="getContact(' + rows[col].contactID + ')">Update</button>';
-                    table += '<button type="button" name="Delete" onclick="deleteContact(' + rows[col].contactID + ')">Delete</button></td>';
+    		for (var row in rows) {
+                    table += "<tr><td>" + rows[row].lastName + "</td>";
+                    table += "<td>" + rows[row].firstName + "</td>";
+                    table += "<td>" + rows[row].phoneNumber + "</td>";
+                    table += "<td>" + rows[row].emailAddress + "</td>";
+                    table += "<td>" + rows[row].webSiteAddress + "</td>";
+                    table += '<td><button type="button" name="Update" onclick="getContact(' + row + ')">Update</button>';
+                    table += '<button type="button" name="Delete" onclick="deleteContact(' + row + ')">Delete</button></td>';
                     table += "</tr>";
                 }
                 table += "</table>";
-
                 document.getElementById("reply").innerHTML = table;
 
             } else {
@@ -275,12 +274,12 @@ function getContact(contactID) {
 
             var contactJSON = JSON.parse(ajaxRequest.responseText);
 
-            document.getElementById('firstName').value = contactJSON[0].firstName;
-            document.getElementById('lastName').value = contactJSON[0].lastName;
-            document.getElementById('phoneNumber').value = contactJSON[0].phoneNumber;
-            document.getElementById('emailAddress').value = contactJSON[0].emailAddress;
-            document.getElementById('webSiteAddress').value = contactJSON[0].webSiteAddress;
-            document.getElementById('comments').value = contactJSON[0].comments;
+            document.getElementById('firstName').value = contactJSON[contactID].firstName;
+            document.getElementById('lastName').value = contactJSON[contactID].lastName;
+            document.getElementById('phoneNumber').value = contactJSON[contactID].phoneNumber;
+            document.getElementById('emailAddress').value = contactJSON[contactID].emailAddress;
+            document.getElementById('webSiteAddress').value = contactJSON[contactID].webSiteAddress;
+            document.getElementById('comments').value = contactJSON[contactID].comments;
 
             document.getElementById("firstName").readOnly = true;
             document.getElementById("lastName").readOnly = true;
@@ -294,8 +293,6 @@ function getContact(contactID) {
     };
 
     // Create contact key JSON and make GET reuqest.
-
-    //var contactJSON = {firstName: firstName, lastName: lastName};
 
     ajaxRequest.open("GET", kHOSTSERVER+"/contacts/"+contactID, true);
     ajaxRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");

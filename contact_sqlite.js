@@ -22,15 +22,14 @@
  * THE SOFTWARE.
  */
 
-// Contact database SQLLite module
+// Contact database SQLite module
 
 var fs = require('fs');
 var sqlite3 = require('sqlite3');
 var db;
 
 contactSQL = {
-    
-    // Open contacts database. If it dows not exist
+    // Open contacts database. If it does not exist
     // create db file and issue CREATE TABLE command
 
     initSQL: function () {
@@ -45,9 +44,9 @@ contactSQL = {
                 "'emailAddress' VARCHAR(255) NULL DEFAULT NULL," +
                 "'webSiteAddress' VARCHAR(255) NULL DEFAULT NULL," +
                 "'comments' VARCHAR(255) NULL DEFAULT NULL);";
-        
+
         console.log("Database support with SQLITE3");
-        
+
         if (!exists) {
             console.log("Creating DB file.");
             fs.closeSync(fs.openSync(dbfile, "w"));
@@ -59,7 +58,7 @@ contactSQL = {
             db.all(dbCreateTable, function (err, rows) {
                 if (err) {
                     console.log(err);
-                    exit();
+                    process.exit(1);
                 } else {
                     console.log("Contacts Table Created...");
                 }
@@ -67,16 +66,15 @@ contactSQL = {
             });
         }
     },
-    
-    // Handle SQLite query. Note Delete and update reurn no error and [] for rows
+    // Handle SQLite query. Note Delete and update return no error and [] for rows
     // so fake success by sending back {"affectedRows": 1} to client.
-    
-    handleSQLQuery: function (query, req, res) {
+
+    handleSQLQuery: function (query, req, res, jsonModifier) {
 
         db.all(query, function (err, rows) {
             if (!err) {
                 if (rows.length) {
-                    res.json(rows);
+                  res.json(jsonModifier(rows));
                 } else {
                     res.json({"affectedRows": 1});
                 }
@@ -89,9 +87,8 @@ contactSQL = {
         });
 
     },
-    
     // Not used at present but call when exit handling put in.
-    
+
     termSQL: function () {
         db.close();
     }

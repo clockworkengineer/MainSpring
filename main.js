@@ -38,6 +38,30 @@ var bodyParser = require('body-parser');
 
 var contactSQL = require("./contact_sqlite.js");
 
+// Reply with unmodified JSON rows
+
+function jsonNULLModifier(rows) {
+
+    return(rows);
+
+}
+
+// Modify rows to be format { ContactID : {"firstName" : firstName, ...},
+//                            ContactID : {"firstName" : firstName, ...}, ...
+
+function jsonModifier(rows) {
+
+    var jsonRows = {};
+    for (var i = 0; i < rows.length; i++) {
+        var obj = rows[i];
+        jsonRows[obj.contactID] = {"firstName": obj.firstName, "lastName": obj.lastName,
+            "phoneNumber": obj.phoneNumber, "emailAddress": obj.emailAddress,
+            "webSiteAddress": obj.webSiteAddress, "comments": obj.comments};
+    }
+    return(jsonRows);
+
+}
+
 // Create express static HTML server.
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -56,7 +80,7 @@ app.post("/contacts", function (req, res) {
             + req.body.webSiteAddress + "','"
             + req.body.comments + "');";
 
-    contactSQL.handleSQLQuery(query, req, res);
+    contactSQL.handleSQLQuery(query, req, res, jsonNULLModifier);
 
 });
 
@@ -66,7 +90,7 @@ app.get("/contacts", function (req, res) {
 
     var query = "SELECT * FROM contacts";
 
-    contactSQL.handleSQLQuery(query, req, res);
+    contactSQL.handleSQLQuery(query, req, res, jsonModifier);
 
 });
 
@@ -75,8 +99,8 @@ app.get("/contacts", function (req, res) {
 app.delete("/contacts/:contactID", function (req, res) {
 
     var query = "DELETE FROM contacts WHERE contactID = " + req.params.contactID;
-            
-    contactSQL.handleSQLQuery(query, req, res);
+
+    contactSQL.handleSQLQuery(query, req, res, jsonNULLModifier);
 
 });
 
@@ -86,7 +110,7 @@ app.get("/contacts/:contactID", function (req, res) {
 
     var query = "SELECT * FROM contacts WHERE contactID = " + req.params.contactID;
 
-    contactSQL.handleSQLQuery(query, req, res);
+    contactSQL.handleSQLQuery(query, req, res, jsonModifier);
 
 });
 
@@ -103,7 +127,7 @@ app.put("/contacts/:contactID", function (req, res) {
             + "',comments='" + req.body.comments
             + "' WHERE contactID = " + req.params.contactID;
 
-    contactSQL.handleSQLQuery(query, req, res);
+    contactSQL.handleSQLQuery(query, req, res, undefined);
 
 });
 
@@ -115,7 +139,7 @@ var server = app.listen(8081, function () {
     var port = server.address().port;
 
     contactSQL.initSQL();
-    
+
     console.log("Contact DB App listening at http://%s:%s", host, port);
 
 });

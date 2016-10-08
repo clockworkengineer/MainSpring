@@ -22,29 +22,51 @@
  * THE SOFTWARE.
  */
 
+// File handling module
+var fs = require('fs');
+
 // Contact database MySQL module
 
 var mysql = require('mysql');
 var pool;
 
 contactSQL = {
-    // Create a pool to handle SQL queries. Noe SQL server, user and password
-    // need to be filled in.
+    // Create a pool to handle SQL queries. Note SQL server, user and password
+    // etc need to be read from a login.json in the same directory as the app.
 
     initSQL: function () {
 
-        pool = mysql.createPool({
-            connectionLimit: 100, //important
-            host: '',
-            user: '',
-            password: '',
-            database: 'contacts_db',
-            debug: false
-        });
+        try {
+            
+            var loginDetails = JSON.parse(fs.readFileSync('./login.json', 'utf8'));
+
+            console.log("Database support with MySQL server");
+            pool = mysql.createPool({
+                connectionLimit: 100, //important
+                host: loginDetails.dbServer,
+                user: loginDetails.dbUserName,
+                password: loginDetails.dbPassword,
+                database: loginDetails.databaseName,
+                debug: false
+            });
+
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                console.log('login.json not found.');
+                console.log('Contents should be: { "dbServer" : "", "dbUserName" : "", "dbPassword" : "", "databaseName" : "" }');
+                process.exit(1);
+            } else {
+                throw err;
+            }
+        }
+     
+
+
     },
+    
     // Handle MySQL query.
 
-    handleSQLQuery: function (query, req, res) {
+    handleSQLQuery: function (query, req, res, jsonModifier) {
 
         pool.getConnection(function (err, connection) {
 
@@ -59,7 +81,7 @@ contactSQL = {
             connection.query(query, function (err, rows) {
                 connection.release();
                 if (!err) {
-                    res.json(rows);
+                    res.json(jsonModifier(rows));
                 } else {
                     res.json(err);
                 }

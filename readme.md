@@ -82,9 +82,9 @@ This example is still a work in progress and I intend to modify it as as when ne
 
 ## FastCGI C++ back-end ##
 
-As part of this project I have written a C++ FastCGI back-end program that slots into the server side as a replacement for the node.js solution. No build instruction are provided and it is provided as an exercise to the reader to achieve. They  require the Boost C++ library for JSON parsing, MYSQL libraries and headers, FastCGI libraries and headers and the light weight logging package clog from GitHub.
+As part of this project I have written a C++ FastCGI back-end program that slots into the server side as a replacement for the node.js solution. No build instruction are provided and it is left as an exercise to the reader to achieve. They  require the Boost C++ library for JSON parsing, MYSQL libraries and headers, FastCGI libraries and headers and the light weight logging package clog from GitHub.
 
-The program was built and tested out on a raspberry pi using the NGINX web server copying the forms directory to the web server root and adding the following to the NGINX web server configuration file.
+The program was built and tested out on a raspberry pi using the NGINX web server by copying the forms directory to the web server root and adding the following to the NGINX web server configuration file.
 
 	location /contacts {
 
@@ -107,6 +107,6 @@ The program was built and tested out on a raspberry pi using the NGINX web serve
 
          }
 
- Its basically tells the server to pass any requests made using the URL "http://[localhost]/contacts" to what ever service is running on port 8000. This would be the contactscgi program which would be run using the command  spawn-fcgi -p 8000 contactscgi (spawn-fcgi may have to be installed in the environment that you are running on).
+ This basically tells the server to pass any requests made using the URL "http://[localhost]/contacts" to what ever service is running on port 8000. This could be the contactscgi program which would be run using the command  spawn-fcgi -p 8000 contactscgi (spawn-fcgi may have to be installed in the environment that you are running on).
 
 

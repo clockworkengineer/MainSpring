@@ -35,6 +35,7 @@
 // MySQL
 #include "mysql.h"
 
+// Class definitions
 #include "SQLDB.hpp"
 
 using namespace std;
@@ -54,7 +55,7 @@ SQLDB* SQLDB::Instance(void) {
 
 void SQLDB::open(void) {
 
-    // Return if alreay active
+    // Return if already active
     
     if (con) {
         return;
@@ -79,7 +80,7 @@ void SQLDB::open(void) {
 
 }
 
-// Close MySQL server conenction
+// Close MySQL server connection
 
 void SQLDB::close(void) {
     mysql_close(this->con);
@@ -113,13 +114,10 @@ void SQLDB::jsonRows(void) {
 
     cout << "Content-Type: application/json\r\n\r\n";
 
-    int count = 0;
     boost::property_tree::ptree rows;
-    boost::property_tree::ptree root;
     while ((row = mysql_fetch_row(result))) {
         boost::property_tree::ptree jsonROW;
         boost::property_tree::ptree cell;
- 
         cell.put_value(row[1]);
         jsonROW.push_back(std::make_pair("firstName", cell));
         cell.put_value(row[2]);

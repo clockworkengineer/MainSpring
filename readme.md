@@ -76,13 +76,15 @@ The HTML form UI uses javascript and AJAX requests to talk to the back-end using
    </tbody>
 </table>
 
-There is currently a choice of two  SQL options available for storing the data; MySQL and SQLite (which is the default). A small source code change is needed in main.js to switch and also the MySQL database details and user credentials need to be edited into contact_mysql.js.
+There is currently a choice of two  SQL options available for storing the data; MySQL and SQLite (which is the default). A small source code change is needed in main.js to switch and also the MySQL database details and user credentials need to be specified by creating a file called login.json in the working directory that has contents
 
-This example is still a work in progress and I intend to modify it as as when necessary i.e. If I find that its not quite RESTFUL and changes need to be made. At present it doesn't use JQuery on the client side but that is one modification that is penciled in for the future along with using another database back-end like MongoDB.
+{ "dbServer" : "", "dbUserName" : "", "dbPassword" : "", "databaseName" : "contacts_db" 
+
+This example is still a work in progress and I intend to modify it as and when necessary i.e. If I find that its not quite RESTFUL and changes need to be made. At present it doesn't use JQuery on the client side but that is one modification that is penciled in for the future along with using another database back-end like MongoDB.
 
 ## FastCGI C++ back-end ##
 
-As part of this project I have written a C++ FastCGI back-end program that slots into the server side as a replacement for the node.js solution. No build instruction are provided and it is left as an exercise to the reader to achieve. They  require the Boost C++ library for JSON parsing, MYSQL libraries and headers, FastCGI libraries and headers and the light weight logging package clog from GitHub.
+As part of this project I have written a C++ FastCGI back-end program that slots into the server side as a replacement for the node.js solution. No build instructions are provided and it is left as an exercise to the reader to achieve. They  require the Boost C++ library for JSON parsing, MYSQL libraries and headers, FastCGI libraries and headers and the light weight logging package clog from GitHub.
 
 The program was built and tested out on a raspberry pi using the NGINX web server by copying the forms directory to the web server root and adding the following to the NGINX web server configuration file.
 
@@ -107,6 +109,6 @@ The program was built and tested out on a raspberry pi using the NGINX web serve
 
          }
 
- This basically tells the server to pass any requests made using the URL "http://[localhost]/contacts" to what ever service is running on port 8000. This could be the contactscgi program which would be run using the command  spawn-fcgi -p 8000 contactscgi (spawn-fcgi may have to be installed in the environment that you are running on).
+ This basically tells the server to pass any requests made using the URL "http://[localhost]/contacts" to what ever service is running on port 8000. This could be the contactscgi program which was be run using the command  spawn-fcgi -p 8000 contactscgi (spawn-fcgi may have to be installed in the environment that you are running on). This program can be set up on any webserver that has FastCGI support but it has been left as an exercise to the reader again to find how this can be achieved.
 
 

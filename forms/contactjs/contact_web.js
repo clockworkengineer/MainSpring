@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-var kHOSTSERVER = "http://localhost:8081";
+var kHOSTSERVER = "http://localhost:8081";  // server and port for AJAX reuqests
 
-// On document ready Javascript initialisation code
+// On document ready initialisation code
 
 $("document").ready(function ()  {
 
@@ -34,7 +34,7 @@ $("document").ready(function ()  {
 
 });
 
-// If first and last name empty retun false.
+// If first and last name empty return false.
 
 function validContactData() {
 
@@ -96,18 +96,18 @@ function cancelContactUpdate() {
 
 }
 
-// Add contact to database
+// Make create contact request to server.
 
 function createContact() {
 
-    // if contact data invalid then don't send.
+    // If contact data invalid then don't send.
 
     if (!validContactData()) {
         return;
     }
 
     // Make create contact request to server.
-    // First extracting form data and creating contact JSON
+    // First extracting form data and creating contact JSON.
 
     var firstName = $("#firstName").val();
     var lastName = $("#lastName").val();
@@ -128,7 +128,7 @@ function createContact() {
         dataType: "json",
         contentType: "application/json; charset=utf-8"
     }).done(function (reply) {
-
+        
         if (reply.affectedRows && (reply.affectedRows === 1)) {
             displayStatus("black", "Create sucessful.");
         } else if (reply.code && reply.errno) {
@@ -154,6 +154,7 @@ function getAllContacts() {
         url: kHOSTSERVER + "/contacts",
         type: "get"
     }).done(function (rows) {
+        
         // Build table from data recieved
         $("#reply").html("");
         var table = "<table id=\"tabletop\" align=\"center\" style=\"width:50%\"><tr><th>Last Name</th><th>First Name</th><th>Phone No</th><th>Email</th><th>Web Site</th><th>Action</th></tr>";
@@ -164,7 +165,6 @@ function getAllContacts() {
                 table += '<td><button type="button" name="Update" onclick="getContact(' + row + ')">Update</button><button type="button" name="Delete" onclick="deleteContact(' + row + ')">Delete</button></td></tr>';
                 $("#tabletop").append(table);
             }
-  
         } else {
             $("#reply").html(table);
         }
@@ -181,6 +181,7 @@ function deleteContact(contactID) {
         url: kHOSTSERVER + "/contacts/" + contactID,
         type: "delete"
     }).done(function (reply) {
+        
         if (reply.affectedRows && (reply.affectedRows === 1)) {
             clearContactDetails();
             displayStatus("black", "Delete sucessful.");

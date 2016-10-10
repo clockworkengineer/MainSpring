@@ -80,7 +80,7 @@ There is currently a choice of two  SQL options available for storing the data; 
 
 { "dbServer" : "", "dbUserName" : "", "dbPassword" : "", "databaseName" : "contacts_db" 
 
-This example is still a work in progress and I intend to modify it as and when necessary i.e. If I find that its not quite RESTFUL and changes need to be made. At present it doesn't use JQuery on the client side but that is one modification that is penciled in for the future along with using another database back-end like MongoDB.
+This example is still a work in progress and I intend to modify it as and when necessary i.e. If I find that its not quite RESTFUL and changes need to be made. At present it doesn't use JQuery on the client side but that is one modification that is penciled in for the future along with using another database back-end like MongoDB (the client side UI has now been converted to use JQuery).
 
 ## FastCGI C++ back-end ##
 

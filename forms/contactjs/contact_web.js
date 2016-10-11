@@ -26,7 +26,7 @@ var kHOSTSERVER = "http://localhost:8081";  // server and port for AJAX reuqests
 
 // On document ready initialisation code
 
-$("document").ready(function ()  {
+$("document").ready(function () {
 
     // Clear contacts form and initialise buttons.
 
@@ -38,7 +38,7 @@ $("document").ready(function ()  {
 
 function validContactData() {
 
-    if (($("#firstName").val() == "") || ($("#lastName").val() == "")) {
+    if (($("#firstName").val() === "") || ($("#lastName").val() === "")) {
         displayStatus("red", "Error: First and Last names must not be empty.");
         return(false);
     }
@@ -48,19 +48,19 @@ function validContactData() {
     return(true);
 }
 
-// Display a message in satus area.
+// Display a message in satus area in in given colour.
 
-function displayStatus(colorValue, message) {
+function displayStatus(colour, message) {
 
-    if (colorValue !== "") {
-        $("#serverReply").css({"color": colorValue});
+    if (colour !== "") {
+        $("#serverReply").css({"color": colour});
     }
     $("#serverReply").text(message);
 
 
 }
 
-// Clear contact details form
+// Clear contact details form.
 
 function clearContactDetails() {
 
@@ -109,17 +109,13 @@ function createContact() {
     // Make create contact request to server.
     // First extracting form data and creating contact JSON.
 
-    var firstName = $("#firstName").val();
-    var lastName = $("#lastName").val();
-    var phoneNumber = $("#phoneNumber").val();
-    var emailAddress = $("#emailAddress").val();
-    var webSiteAddress = $("#webSiteAddress").val();
-    var comments = $("#comments").val();
+    var contactJSON = {};
 
-    var contactJSON = {firstName: firstName, lastName: lastName, phoneNumber: phoneNumber,
-        emailAddress: emailAddress, webSiteAddress: webSiteAddress, comments: comments};
+    $('.element').each(function () {
+        contactJSON[this.name] = this.value;
+    });
 
-    // POST create contact request with JSON data
+    // POST create contact request with JSON data.
 
     $.ajax({
         url: kHOSTSERVER + "/contacts",
@@ -128,7 +124,7 @@ function createContact() {
         dataType: "json",
         contentType: "application/json; charset=utf-8"
     }).done(function (reply) {
-        
+
         if (reply.affectedRows && (reply.affectedRows === 1)) {
             displayStatus("black", "Create sucessful.");
         } else if (reply.code && reply.errno) {
@@ -145,26 +141,29 @@ function createContact() {
 }
 
 
-// Make get all contacts request to server
+// Make get all contacts request to server.
 
 function getAllContacts() {
 
-    
+
     $.ajax({
         url: kHOSTSERVER + "/contacts",
         type: "get"
     }).done(function (rows) {
-        
+
         // Build table from data recieved
+
         $("#reply").html("");
         var table = "<table id=\"tabletop\" align=\"center\" style=\"width:50%\"><tr><th>Last Name</th><th>First Name</th><th>Phone No</th><th>Email</th><th>Web Site</th><th>Action</th></tr>";
         $("#reply").append(table);
         if (rows.length !== 0) {
+
             for (var row in rows) {
                 table = "<tr><td>" + rows[row].lastName + "</td><td>" + rows[row].firstName + "</td><td>" + rows[row].phoneNumber + "</td><td>" + rows[row].emailAddress + "</td><td>" + rows[row].webSiteAddress + "</td>";
                 table += '<td><button type="button" name="Update" onclick="getContact(' + row + ')">Update</button><button type="button" name="Delete" onclick="deleteContact(' + row + ')">Delete</button></td></tr>';
                 $("#tabletop").append(table);
             }
+
         } else {
             $("#reply").html(table);
         }
@@ -181,7 +180,7 @@ function deleteContact(contactID) {
         url: kHOSTSERVER + "/contacts/" + contactID,
         type: "delete"
     }).done(function (reply) {
-        
+
         if (reply.affectedRows && (reply.affectedRows === 1)) {
             clearContactDetails();
             displayStatus("black", "Delete sucessful.");
@@ -195,7 +194,7 @@ function deleteContact(contactID) {
 
 }
 
-// Make get contact request to server
+// Make get contact request to server.
 
 function getContact(contactID) {
 
@@ -209,12 +208,9 @@ function getContact(contactID) {
         // Populate update form with recieved data.
         // Change buttons to Update/Cancel and the actions
 
-        $("#firstName").val(contactJSON[contactID].firstName);
-        $("#lastName").val(contactJSON[contactID].lastName);
-        $("#phoneNumber").val(contactJSON[contactID].phoneNumber);
-        $("#emailAddress").val(contactJSON[contactID].emailAddress);
-        $("#webSiteAddress").val(contactJSON[contactID].webSiteAddress);
-        $("#comments").val(contactJSON[contactID].comments);
+        for (var field in contactJSON[contactID]) {
+            $('[name="' + field + '"]').val(contactJSON[contactID][field]);
+        }
 
         $("#firstName").prop("readonly", true);
         $("#lastName").prop("readOnly", true);
@@ -222,30 +218,29 @@ function getContact(contactID) {
 
         $("#saveForm").val("Update");
         $("#saveForm").unbind();
-        $("#saveForm").click(function () { updateContact(contactID); });
+        $("#saveForm").click(function () {
+            updateContact(contactID);
+        });
         $("#clearForm").val("Cancel");
         $("#clearForm").unbind();
         $("#clearForm").click(cancelContactUpdate);
+
     });
 }
-
 
 // Make update contact request to server.
 
 function updateContact(contactID) {
 
-
     // Make update contact request to server.
     // First extracting form data and creating contact JSON
 
-    var firstName = $("#firstName").val();
-    var lastName = $("#lastName").val();
-    var phoneNumber = $("#phoneNumber").val();
-    var emailAddress = $("#emailAddress").val();
-    var webSiteAddress = $("#webSiteAddress").val();
-    var comments = document.getElementById("comments").value;
-    var contactJSON = {firstName: firstName, lastName: lastName, phoneNumber: phoneNumber,
-        emailAddress: emailAddress, webSiteAddress: webSiteAddress, comments: comments};
+    var contactJSON = {};
+
+    $('.element').each(function () {
+        console.log(this.name + ': ' + this.value);
+        contactJSON[this.name] = this.value;
+    });
 
     $.ajax({
         url: kHOSTSERVER + "/contacts/" + contactID,

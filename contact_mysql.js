@@ -1,3 +1,4 @@
+'use strict';
 /* 
  * The MIT License
  *
@@ -23,6 +24,7 @@
  */
 
 // File handling module
+
 var fs = require('fs');
 
 // Contact database MySQL module
@@ -30,7 +32,8 @@ var fs = require('fs');
 var mysql = require('mysql');
 var pool;
 
-contactSQL = {
+var contactSQL = {
+    
     // Create a pool to handle SQL queries. Note SQL server, user and password
     // etc need to be read from a login.json in the same directory as the app.
 
@@ -41,6 +44,7 @@ contactSQL = {
             var loginDetails = JSON.parse(fs.readFileSync('./login.json', 'utf8'));
 
             console.log("Database support with MySQL server");
+            
             pool = mysql.createPool({
                 connectionLimit: 100, //important
                 host: loginDetails.dbServer,

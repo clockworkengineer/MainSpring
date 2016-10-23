@@ -1,6 +1,6 @@
 ## CRUD based Contact Database Application ##
 
-This started out as a personal exercise to put into practice skills that I have learnt in the last few months. It consists of a form based HTML front-end that connects to the server based Node.js back-end that talks to either a MYSQL database or SQLite using SQL queries. The main form user interface is a bit primitive and clunky at the moment but it is useable and I will come back to it a later date. At present it just stores first name, last name, phone number, email address, website address and a comment per person.
+This started out as a personal exercise to put into practice skills that I have learnt in the last few months. It consists of a form based HTML front-end that connects to the server based Node.js back-end that talks to either a MYSQL database or SQLite using SQL queries. The main form user interface is a bit primitive and clunky at the moment but it is useable and I will come back to it a later date and look at it. At present it just stores first name, last name, phone number, email address, website address and a comment per person.
 
 The HTML form UI uses javascript and AJAX requests to talk to the back-end using the following RESTFUL API.
 
@@ -80,7 +80,7 @@ There is currently a choice of two  SQL options available for storing the data; 
 
 { "dbServer" : "", "dbUserName" : "", "dbPassword" : "", "databaseName" : "contacts_db" 
 
-This example is still a work in progress and I intend to modify it as and when necessary i.e. If I find that its not quite RESTFUL and changes need to be made. At present it doesn't use JQuery on the client side but that is one modification that is penciled in for the future along with using another database back-end like MongoDB (the client side UI has now been converted to use JQuery).
+This example is still a work in progress and I intend to modify it as and when necessary i.e. If I find that its not quite RESTFUL and changes need to be made. At present it doesn't use JQuery on the client side but that is one modification that is penciled in for the future along with using another database back-end like MongoDB (Note. The client side JavaScript has now been converted to use JQuery).
 
 ## FastCGI C++ back-end ##
 
@@ -109,6 +109,6 @@ The program was built and tested out on a raspberry pi using the NGINX web serve
 
          }
 
- This basically tells the server to pass any requests made using the URL "http://[localhost]/contacts" to what ever service is running on port 8000. This could be the contactscgi program which was be run using the command  spawn-fcgi -p 8000 contactscgi (spawn-fcgi may have to be installed in the environment that you are running on). This program can be set up on any webserver that has FastCGI support but it has been left as an exercise to the reader again to find how this can be achieved.
+ This basically tells the server to pass any requests made using the URL "http://[localhost]/contacts" to what ever service is running on port 8000. This could be the contactscgi program which was be run using the command  spawn-fcgi -p 8000 contactscgi (spawn-fcgi may have to be installed in the environment that you are running on). This program can be set up on any webserver that has FastCGI support but it has been left as an exercise to the reader again to find how this can be achieved. In future I may come back to the program to add better error handling/reporting but given its not designed to used in the real world but as an exercise don't hold your breath.
 
 

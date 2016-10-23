@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+ 
 //  C++ Standard Library
 #include <string>
 #include <iostream>
@@ -50,7 +50,7 @@ SQLDB * SQLDB::m_pInstance = NULL;  // Instance variable for SQLDB
 
 void handle_put(FCGX_Request *request) {
 
-    clog_info(CLOG(MY_LOGGER), "PUT REQUEST %s]", FCGX_GetParam("REQUEST_URI", request->envp));
+    clog_info(CLOG(MY_LOGGER), "[PUT REQUEST %s]", FCGX_GetParam("REQUEST_URI", request->envp));
 
     try {
 

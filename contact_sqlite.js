@@ -1,3 +1,4 @@
+'use strict';
 /* 
  * The MIT License
  *
@@ -22,15 +23,24 @@
  * THE SOFTWARE.
  */
 
-// Contact database SQLite module
+// File handling module
 
 var fs = require('fs');
+
+// Contact database SQLite module
+
 var sqlite3 = require('sqlite3');
+
+// Database connection
+
 var db;
 
-contactSQL = {
+var contactSQL = {
+    
     // Open contacts database. If it does not exist
     // create db file and issue CREATE TABLE command
+    // For simplicity all fields are 255 char and 
+    // can be edited.
 
     initSQL: function () {
 
